@@ -49,6 +49,7 @@ enum AppIcon: String {
     case camera = "camera"
     case checkmark = "checkmark"
     case chevronRight = "chevron.right"
+    case chevronLeft = "chevron.left"
     case close = "xmark"
 
     // States

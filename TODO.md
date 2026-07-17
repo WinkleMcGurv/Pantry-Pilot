@@ -37,14 +37,14 @@ Legend: `[ ]` pending · `[~]` in progress · `[x]` done
 - [ ] Programmatic navigation coverage (push/pop/reset) via `AppRouter`
 - [ ] Tab re-selection → pop-to-root behaviour
 
-## Phase 4 — Onboarding (full)
+## Phase 4 — Onboarding (full) ✅
 
-- [ ] Multi-step questionnaire capturing every `PROJECT_SPEC` field
-- [ ] Body metrics → suggested calorie/protein targets
-- [ ] Cuisine / food / allergy / diet multi-selects (reuse `PPChip`)
-- [ ] Preferred supermarkets & household size
-- [ ] Persist to `UserProfile`; editable later from Profile screen
-- [ ] Validation + progress indicator
+- [x] Multi-step questionnaire capturing every `PROJECT_SPEC` field
+- [x] Body metrics → suggested calorie/protein targets
+- [x] Cuisine / food / allergy / diet multi-selects (reuse `PPChip`)
+- [x] Preferred supermarkets & household size
+- [x] Persist to `UserProfile` (editing from the Profile screen arrives with that screen's phase)
+- [x] Validation + progress indicator
 
 ## Phase 5 — Pantry
 

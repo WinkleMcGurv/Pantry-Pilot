@@ -28,6 +28,7 @@ struct PPChip: View {
         if let action {
             Button(action: action) { content }
                 .buttonStyle(.plain)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
         } else {
             content
         }
