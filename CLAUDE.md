@@ -61,3 +61,82 @@ Do not optimise unrelated code.
 Avoid creating new files unless there is a clear architectural benefit.
 
 Prefer extending existing components over creating new abstractions.
+
+# Graphify Workflow
+
+## Purpose
+
+Graphify exists to help understand project structure and dependencies when required.
+
+It is **not** part of the normal development workflow and should be used sparingly to minimise context usage and execution time.
+
+## General Rules
+
+- Do not automatically run `graphify update .`
+- Do not automatically read `graphify-out/GRAPH_REPORT.md`
+- Do not regenerate the graph after every feature
+- Do not use Graphify when the required information can be determined directly from the relevant source files
+
+## When to Use Graphify
+
+Only use Graphify if one of the following is true:
+
+- locating where existing functionality lives
+- understanding complex dependencies
+- tracing data flow between components
+- planning a significant architectural refactor
+- explicitly requested by the user
+
+## When NOT to Use Graphify
+
+Do not use Graphify for:
+
+- normal feature development
+- UI work
+- small bug fixes
+- documentation updates
+- refactoring isolated files
+- code already well understood from local inspection
+
+## Updating the Graph
+
+Only run:
+
+graphify update .
+
+when:
+
+- major architectural changes have been completed
+- multiple new modules/features have been introduced
+- the user explicitly requests an updated graph
+
+Never update the graph after every coding session.
+
+## Context Efficiency
+
+Prefer:
+
+- reading only the files relevant to the current task
+- targeted code searches
+- existing project documentation
+
+over Graphify whenever practical.
+
+## Graph Reports
+
+Treat `graphify-out/GRAPH_REPORT.md` as a high-level architectural reference only.
+
+Do not repeatedly reread it during a session unless architecture has changed or the current task specifically requires it.
+
+
+# Context Optimisation
+
+Always minimise token usage.
+
+- Read PROJECT_SPEC.md once at the start of a session.
+- Afterwards, consult only the sections relevant to the current task.
+- Read only the source files needed for the current feature.
+- Avoid broad project scans.
+- Avoid reanalysing completed features unless they are directly affected.
+- Extend existing components before creating new abstractions.
+- Stop immediately after the requested feature is complete.
