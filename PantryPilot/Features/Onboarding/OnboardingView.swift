@@ -9,6 +9,7 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 struct OnboardingView: View {
     @Environment(\.modelContext) private var context
@@ -20,6 +21,9 @@ struct OnboardingView: View {
 
     @State private var model = OnboardingViewModel()
     @State private var saveFailed = false
+    /// While typing, the footer hides so the Continue button never floats
+    /// above the keyboard — field navigation belongs to the keyboard accessory.
+    @State private var keyboardVisible = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,10 +35,20 @@ struct OnboardingView: View {
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            footer
+            if !keyboardVisible {
+                footer
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
         .background(AppColor.background)
         .animation(stepAnimation, value: model.step)
+        .animation(.easeOut(duration: 0.2), value: keyboardVisible)
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            keyboardVisible = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            keyboardVisible = false
+        }
         .alert("Couldn't save your profile", isPresented: $saveFailed) {
             Button("OK", role: .cancel) {}
         } message: {

@@ -88,6 +88,8 @@ Legend: `[ ]` pending · `[~]` in progress · `[x]` done
 ## Phase 9 — Statistics
 
 - [ ] Log cooked meals (`MealLogEntry`)
+- [ ] Ad-hoc food logging (meals/snacks eaten outside the plan) so calorie
+      tracking is complete, not just plan-based — user request, 2026-07-17
 - [ ] Calories & macro trends, grocery spend, waste reduction, meals cooked
 - [ ] Charts (load the `dataviz` guidance before building charts)
 
