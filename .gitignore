@@ -19,6 +19,9 @@ PantryPilot.xcodeproj/
 # Graphify (regenerable via `graphify update .`)
 graphify-out/
 
+# Claude Code local (per-machine) settings
+.claude/settings.local.json
+
 # Misc
 *.moved-aside
 *.hmap
