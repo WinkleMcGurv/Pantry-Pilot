@@ -12,7 +12,7 @@ xcodegen generate   # after adding/removing files (`.xcodeproj` is generated, gi
 xcodebuild build -project PantryPilot.xcodeproj -scheme PantryPilot \
   -destination 'platform=iOS Simulator,name=iPhone 17'
 APP=$(find ~/Library/Developer/Xcode/DerivedData -name "PantryPilot.app" -path "*iphonesimulator*" | head -1)
-xcrun simctl install booted "$APP" && xcrun simctl launch booted com.pantrypilot.app
+xcrun simctl install booted "$APP" && xcrun simctl launch booted com.gurv.PantryPilot
 xcrun simctl io booted screenshot out.png
 ```
 
@@ -31,13 +31,13 @@ Gotchas:
   their +/- via `coordinate(withNormalizedOffset:)`, assert via `value`.
 - Option cards merge title+subtitle into one label — match with
   `label BEGINSWITH` predicates.
-- `xcrun simctl uninstall booted com.pantrypilot.app` first for a fresh
+- `xcrun simctl uninstall booted com.gurv.PantryPilot` first for a fresh
   SwiftData store.
 
 ## Inspecting persisted data
 
 ```bash
-DATA=$(xcrun simctl get_app_container booted com.pantrypilot.app data)
+DATA=$(xcrun simctl get_app_container booted com.gurv.PantryPilot data)
 sqlite3 "$DATA/Library/Application Support/default.store" "SELECT ... FROM ZUSERPROFILE;"
 # Array columns are NSKeyedArchiver blobs: SELECT writefile('b.bin', ZCOL) then plutil -p b.bin
 ```
@@ -49,6 +49,6 @@ runtime (verified: even Settings stays light). Use the app's own theme
 preference instead:
 
 ```bash
-xcrun simctl spawn booted defaults write com.pantrypilot.app settings.appearanceMode dark
-# relaunch, screenshot, then: defaults delete com.pantrypilot.app settings.appearanceMode
+xcrun simctl spawn booted defaults write com.gurv.PantryPilot settings.appearanceMode dark
+# relaunch, screenshot, then: defaults delete com.gurv.PantryPilot settings.appearanceMode
 ```

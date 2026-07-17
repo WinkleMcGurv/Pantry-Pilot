@@ -1,6 +1,6 @@
 name: PantryPilot
 options:
-  bundleIdPrefix: com.pantrypilot
+  bundleIdPrefix: com.gurv
   deploymentTarget:
     iOS: "18.0"
   createIntermediateGroups: true
@@ -26,7 +26,7 @@ targets:
       - path: PantryPilot
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.pantrypilot.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.gurv.PantryPilot
         PRODUCT_NAME: PantryPilot
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES

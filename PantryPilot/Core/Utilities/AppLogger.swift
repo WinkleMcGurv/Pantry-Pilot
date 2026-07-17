@@ -9,7 +9,7 @@ import Foundation
 import os
 
 enum AppLogger {
-    private static let subsystem = Bundle.main.bundleIdentifier ?? "com.pantrypilot.app"
+    private static let subsystem = Bundle.main.bundleIdentifier ?? "com.gurv.PantryPilot"
 
     static let app = Logger(subsystem: subsystem, category: "app")
     static let persistence = Logger(subsystem: subsystem, category: "persistence")
