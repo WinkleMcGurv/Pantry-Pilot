@@ -49,12 +49,8 @@ extension AppRoute {
                               message: "Search and filter recipes by calories, budget, cuisine and more.",
                               phase: "Phase 6")
                 .navigationTitle("Explore")
-        case .pantryItemDetail:
-            PlaceholderScreen(icon: .pantry, title: "Pantry Item",
-                              message: "Edit quantity, expiry, storage and photo.",
-                              phase: "Phase 5")
-                .navigationTitle("Item")
-                .navigationBarTitleDisplayMode(.inline)
+        case .pantryItemDetail(let itemID):
+            PantryItemDetailView(itemID: itemID)
         case .shoppingListDetail:
             PlaceholderScreen(icon: .shopping, title: "Shopping List",
                               message: "Aisle-grouped list with tick-off, share and print.",

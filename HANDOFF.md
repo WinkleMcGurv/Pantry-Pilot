@@ -1,74 +1,76 @@
 # HANDOFF.md
 
-_Last updated: 2026-07-17 — end of **Phase 4: Onboarding (full questionnaire)**._
+_Last updated: 2026-07-17 — end of **Phase 5: Pantry**._
 
 ## Summary
 
-This session replaced the single-screen onboarding gate with the full
-multi-step questionnaire from `PROJECT_SPEC.md`. Every spec field is captured
-(name, age, height, weight, activity, goal, calories, protein, budget, meals
-per day, cooking ability, cooking time, cuisines, favourite/disliked foods,
-allergies, dietary preferences, household size, supermarkets), persisted to
-`UserProfile`, and the completed profile gates into the main app.
+This session delivered the pantry inventory: a list grouped by storage
+location (canonical `StorageLocation` order, soonest expiry first within each
+section), full add/edit/delete for `PantryItem`, expiry badges, photo attach
+and a manual barcode field. Earlier the same day, Phase 4 onboarding shipped
+with two rounds of on-device feedback fixes (keyboard focus chaining +
+Next/Done accessory; bottom CTA hides while typing; meals-per-day floor of 1),
+and the app was deployed to Gavin's iPhone (paired device "Gavin",
+`devicectl`; bundle ID **com.gurv.PantryPilot** — the original
+com.pantrypilot.app was taken by another team; team ID is set in
+`project.yml`).
 
-Verified end-to-end on the iPhone 17 simulator with a temporary XCUITest
-harness (removed before commit): validation gating, the suggested-targets
-estimator (asserted 3375 kcal / 134 g for a known input), "No preference"
-exclusivity, tag editors, the SwiftData row (checked via sqlite3), the
-relaunch gate, and Dark Mode via the app's theme preference. Build succeeds
-with 0 compiler warnings. See `.claude/skills/verify/SKILL.md` (new) for the
-reusable verification recipe, including simulator gotchas.
+Verified end-to-end on the iPhone 17 simulator via a temporary XCUITest
+harness (removed before commit): empty state → add (name, 200 g, Fridge,
+Dairy & Eggs, expiry +3 days) → grouped row with "3 days" badge → edit to
+150 g → relaunch persistence → swipe-delete → empty state. Build has 0
+compiler warnings. See `.claude/skills/verify/SKILL.md` for the recipe.
 
-## What was added
+## What was added (Phase 5)
 
-- `Features/Onboarding/OnboardingViewModel.swift` — `@Observable` draft state,
-  per-step validation (`validationMessage(for:)`), navigation, tag handling,
-  nutrition estimation and `complete(in:)` persistence. Estimation uses
-  Mifflin–St Jeor with a **sex-neutral midpoint** constant (spec collects no
-  sex field), activity multipliers (1.2–1.9) and goal adjustments
-  (−400 / +300 kcal; 1.4–2.0 g/kg protein), labelled as an estimate in the UI.
-- `Features/Onboarding/OnboardingSteps.swift` — welcome, about, body/activity,
-  goals, cooking, tastes, restrictions, budget/shopping and summary steps.
-- `Features/Onboarding/OnboardingControls.swift` — step scaffold, option
-  cards, stepper row (accessibility-adjustable), chip grid, tag editor.
-  Deliberately private to onboarding; promote to the design system only when
-  a second feature needs them.
-- `Core/DesignSystem/Components/FlowLayout.swift` — reusable wrapping layout
-  for chips/tags (Recipe Explorer filters will want it too).
-- `OnboardingView.swift` (rewritten) — animated progress bar, back button,
-  directional slide transitions (plain fade under Reduce Motion), footer with
-  validation hint + gated Continue, save-failure alert, haptics throughout.
-- `PPChip` now exposes the `.isSelected` accessibility trait; `AppIcon` gained
-  `chevronLeft`.
+- `Features/Pantry/PantryItemForm.swift` — `PantryItemDraft` (value-type
+  working copy; parsing/validation; `apply(to:)`/`makeItem()`) and
+  `PantryItemFormFields` (name, quantity + unit chips, storage chips,
+  category chips, expiry toggle + date picker, PhotosPicker with downscaling
+  to ≤1200px JPEG, barcode field). Reuses `OnboardingChipGrid` and
+  `keyboardDoneToolbar` from onboarding.
+- `Features/Pantry/PantryItemEditorViews.swift` — `PantryItemEditorContent`
+  (scroll + bottom CTA that hides while the keyboard is up, per the app's
+  form convention), `AddPantryItemSheet` (modal create) and
+  `PantryItemDetailView` (pushed editor with delete confirmation; resolves
+  its item by `id` via `@Query`, shows a graceful "Item removed" state if
+  it vanishes).
+- `PantryView.swift` (rewritten) — grouped `List` (`.insetGrouped`, themed),
+  rows with photo/icon thumbnail, quantity + unit, expiry subtitle, urgent
+  badges (`Expired`/`Today`/`1 day`/`N days` ≤ 3), swipe-to-delete,
+  empty state, add button in the leading toolbar slot.
+- `PantryItem` gained `@Attribute(.unique) id: UUID` (matches `Recipe`;
+  required by the `pantryItemDetail(itemID:)` route — additive, lightweight
+  migration). `daysUntilExpiry` is now **calendar-day based**
+  (startOfDay-to-startOfDay; 0 = today, negative = expired).
+- `AppRoute.pantryItemDetail` now resolves to the real detail view.
 
-## Behaviour notes
+## Conventions to carry forward
 
-- Only the name is required; optional numerics validate range **only when
-  filled** ("or left blank" messaging). Limits live in
-  `OnboardingViewModel.Limits`.
-- "No preference" (diet) is mutually exclusive with the other diet chips —
-  handled in `toggle(_: DietaryPreference)` and stored as an empty array.
-- Supermarkets: ten common UK chains as one-tap chips + free-text entry for
-  others; all merge into `preferredSupermarkets`.
-- The estimator card only appears once age/height/weight are all valid;
-  "Use these targets" copies values into the editable fields.
-- `RootView`'s `@Query`-based gate is unchanged; `onFinished` remains a no-op
-  closure by design.
+- **Forms:** bottom CTA hides while the keyboard is visible; number/decimal
+  pads get the `keyboardDoneToolbar` accessory with Next-chaining between
+  fields. (Direct user feedback — do not regress this.)
+- **Mutations** go through `container.dataStore` (+ haptics on success/error);
+  reactive reads use `@Query`.
+- Do **not** put `.accessibilityLabel` on a chip grid container — it collapses
+  the grid into one element and hides the chip buttons (caught by UI test).
 
-## Watch out for
+## User context (from device testing)
 
-- The simulator runtime here **ignores `simctl ui booted appearance dark`**
-  (even system Settings stays light). Test dark mode via
-  `defaults write com.pantrypilot.app settings.appearanceMode dark` + relaunch.
-- `UserProfile.dietaryPreferences` accessor filters unknown raw values; the
-  `.none` case is intentionally never persisted.
-- Onboarding controls assume portrait iPhone (per project settings).
+- Household of 2; not every day has every meal — sometimes one shared evening
+  meal. Planner (Phase 7) must handle sparse days and includes a backlog item
+  for a "random meal from pantry + top-up shop" suggester (user request).
+- Phase 9 gained ad-hoc food logging (full calorie tracker, not plan-only).
+- Free Apple ID provisioning: device installs expire after 7 days; redeploy
+  with the CLI recipe in `.claude/skills/verify/SKILL.md` (build with
+  `-allowProvisioningUpdates`, install/launch via `devicectl`, device ID
+  `AFC67B0F-5511-511F-86C3-2300F10ACBD6`).
 
 ## ▶️ Recommended next task
 
-**Phase 5 — Pantry** (list grouped by storage location, CRUD for `PantryItem`,
-expiry badges). It validates the `DataStore` repository pattern end-to-end and
-is self-contained. Phases 2–3 (design-system polish, navigation hardening)
-remain open and can be slotted in whenever.
+**Phase 6 — Recipe Database & Explorer** (seed recipes, `RecipeRepository`,
+detail screen, search + filters, favourites). It unblocks the planner and the
+random-meal suggester. Phases 2–3 (polish/hardening) remain open for whenever
+a lighter session is wanted.
 
 See `TODO.md` for the full phased backlog.

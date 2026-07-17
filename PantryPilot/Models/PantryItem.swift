@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 final class PantryItem {
+    @Attribute(.unique) var id: UUID
     var name: String
     var quantity: Double
     var unitRaw: String
@@ -22,6 +23,7 @@ final class PantryItem {
     var dateAdded: Date
 
     init(
+        id: UUID = UUID(),
         name: String,
         quantity: Double = 1,
         unit: MeasurementUnit = .pieces,
@@ -31,6 +33,7 @@ final class PantryItem {
         barcode: String? = nil,
         photoData: Data? = nil
     ) {
+        self.id = id
         self.name = name
         self.quantity = quantity
         self.unitRaw = unit.rawValue
@@ -59,10 +62,17 @@ extension PantryItem {
         set { categoryRaw = newValue.rawValue }
     }
 
-    /// Days until expiry, or `nil` if no expiry date is set.
+    /// Whole calendar days until expiry (0 = today, negative = expired), or
+    /// `nil` if no expiry date is set. Day-granular because expiry is picked
+    /// as a date, not a time.
     var daysUntilExpiry: Int? {
         guard let expiryDate else { return nil }
-        return Calendar.current.dateComponents([.day], from: .now, to: expiryDate).day
+        let calendar = Calendar.current
+        return calendar.dateComponents(
+            [.day],
+            from: calendar.startOfDay(for: .now),
+            to: calendar.startOfDay(for: expiryDate)
+        ).day
     }
 
     /// Whether the item expires within the next three days.

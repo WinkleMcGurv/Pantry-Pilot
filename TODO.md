@@ -46,13 +46,13 @@ Legend: `[ ]` pending · `[~]` in progress · `[x]` done
 - [x] Persist to `UserProfile` (editing from the Profile screen arrives with that screen's phase)
 - [x] Validation + progress indicator
 
-## Phase 5 — Pantry
+## Phase 5 — Pantry ✅
 
-- [ ] Pantry list grouped by storage location
-- [ ] Add / edit / delete `PantryItem`
-- [ ] Expiry sorting + "expiring soon" badges
-- [ ] Quantity & unit editing, photo attach
-- [ ] Barcode field (manual entry now; scanning is a premium enhancement)
+- [x] Pantry list grouped by storage location
+- [x] Add / edit / delete `PantryItem`
+- [x] Expiry sorting + "expiring soon" badges
+- [x] Quantity & unit editing, photo attach
+- [x] Barcode field (manual entry now; scanning is a premium enhancement)
 
 ## Phase 6 — Recipe Database & Explorer
 
