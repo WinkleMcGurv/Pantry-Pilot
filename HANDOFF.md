@@ -1,6 +1,9 @@
 # HANDOFF.md
 
-_Last updated: 2026-07-17 — end of **Phase 5: Pantry**._
+_Last updated: 2026-07-17 — session close after **Phase 4 (Onboarding)** and
+**Phase 5 (Pantry)**. Working tree clean; Graphify graph regenerated (737
+nodes / 1237 edges) to reflect the two new feature modules and route wiring.
+App deployed to Gavin's iPhone and confirmed working (status: **Working**)._
 
 ## Summary
 
