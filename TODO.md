@@ -74,6 +74,9 @@ Legend: `[ ]` pending · `[~]` in progress · `[x]` done
 - [ ] Flexible days: not every day has every meal (sometimes a single shared
       meal). Planner should work as a "meal suggester" for days the household
       eats together — see user feedback, 2026-07-17
+- [ ] "Random meal" / surprise-me: suggest a single meal built from current
+      pantry stock plus a minimal top-up list from a preferred supermarket
+      (rule-based here; AI version in Phase 11) — user request, 2026-07-17
 
 ## Phase 8 — Shopping Lists & Budget
 
