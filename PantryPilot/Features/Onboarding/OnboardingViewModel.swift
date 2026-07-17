@@ -127,7 +127,7 @@ final class OnboardingViewModel {
         static let calories = 800...8000
         static let proteinGrams = 10.0...400.0
         static let budget = 0.0...2000.0
-        static let mealsPerDay = 2...6
+        static let mealsPerDay = 1...6
         static let householdSize = 1...10
         static let cookingTimeOptions = [15, 30, 45, 60, 90]
     }

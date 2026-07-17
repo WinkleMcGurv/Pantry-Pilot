@@ -71,6 +71,9 @@ Legend: `[ ]` pending · `[~]` in progress · `[x]` done
 - [ ] Monthly calendar view
 - [ ] Meal-prep mode (batch by shared ingredients)
 - [ ] Rule-based planning engine behind `MealPlanningService` (pre-AI)
+- [ ] Flexible days: not every day has every meal (sometimes a single shared
+      meal). Planner should work as a "meal suggester" for days the household
+      eats together — see user feedback, 2026-07-17
 
 ## Phase 8 — Shopping Lists & Budget
 

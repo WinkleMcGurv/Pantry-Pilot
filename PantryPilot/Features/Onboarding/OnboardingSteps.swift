@@ -78,14 +78,21 @@ struct OnboardingWelcomeStep: View {
 
 struct OnboardingAboutStep: View {
     @Bindable var model: OnboardingViewModel
+    @FocusState private var focusedField: Field?
+
+    private enum Field { case name, age }
 
     var body: some View {
         OnboardingStepScaffold(title: model.step.title, subtitle: model.step.subtitle) {
             VStack(spacing: AppSpacing.lg) {
                 PPTextField(title: "Name", icon: .profile, placeholder: "Your name", text: $model.name)
                     .textContentType(.givenName)
+                    .focused($focusedField, equals: .name)
+                    .submitLabel(.next)
+                    .onSubmit { focusedField = .age }
 
                 PPTextField(title: "Age (optional)", placeholder: "e.g. 32", keyboard: .numberPad, text: $model.ageText)
+                    .focused($focusedField, equals: .age)
 
                 OnboardingStepperRow(
                     title: "Household size",
@@ -96,6 +103,7 @@ struct OnboardingAboutStep: View {
                 )
             }
         }
+        .keyboardDoneToolbar(isActive: focusedField != nil) { focusedField = nil }
     }
 }
 
@@ -103,13 +111,18 @@ struct OnboardingAboutStep: View {
 
 struct OnboardingBodyStep: View {
     @Bindable var model: OnboardingViewModel
+    @FocusState private var focusedField: Field?
+
+    private enum Field { case height, weight }
 
     var body: some View {
         OnboardingStepScaffold(title: model.step.title, subtitle: model.step.subtitle) {
             VStack(alignment: .leading, spacing: AppSpacing.xxl) {
                 HStack(alignment: .top, spacing: AppSpacing.md) {
                     PPTextField(title: "Height (cm)", placeholder: "e.g. 178", keyboard: .decimalPad, text: $model.heightText)
+                        .focused($focusedField, equals: .height)
                     PPTextField(title: "Weight (kg)", placeholder: "e.g. 74.5", keyboard: .decimalPad, text: $model.weightText)
+                        .focused($focusedField, equals: .weight)
                 }
 
                 VStack(alignment: .leading, spacing: AppSpacing.md) {
@@ -128,6 +141,12 @@ struct OnboardingBodyStep: View {
                 }
             }
         }
+        .keyboardDoneToolbar(
+            isActive: focusedField != nil,
+            title: focusedField == .height ? "Next" : "Done"
+        ) {
+            focusedField = focusedField == .height ? .weight : nil
+        }
     }
 }
 
@@ -136,6 +155,9 @@ struct OnboardingBodyStep: View {
 struct OnboardingGoalsStep: View {
     @Bindable var model: OnboardingViewModel
     @Environment(AppContainer.self) private var container
+    @FocusState private var focusedField: Field?
+
+    private enum Field { case calories, protein }
 
     var body: some View {
         OnboardingStepScaffold(title: model.step.title, subtitle: model.step.subtitle) {
@@ -160,10 +182,18 @@ struct OnboardingGoalsStep: View {
                     SectionHeader(title: "Daily targets", subtitle: "Optional — leave blank to decide later")
                     HStack(alignment: .top, spacing: AppSpacing.md) {
                         PPTextField(title: "Calories (kcal)", placeholder: "e.g. 2200", keyboard: .numberPad, text: $model.calorieText)
+                            .focused($focusedField, equals: .calories)
                         PPTextField(title: "Protein (g)", placeholder: "e.g. 130", keyboard: .numberPad, text: $model.proteinText)
+                            .focused($focusedField, equals: .protein)
                     }
                 }
             }
+        }
+        .keyboardDoneToolbar(
+            isActive: focusedField != nil,
+            title: focusedField == .calories ? "Next" : "Done"
+        ) {
+            focusedField = focusedField == .calories ? .protein : nil
         }
     }
 
@@ -223,7 +253,8 @@ struct OnboardingCookingStep: View {
                     title: "Meals per day",
                     subtitle: "Snacks are planned separately",
                     value: $model.mealsPerDay,
-                    range: OnboardingViewModel.Limits.mealsPerDay
+                    range: OnboardingViewModel.Limits.mealsPerDay,
+                    display: { $0 == 1 ? "1 meal" : "\($0) meals" }
                 )
 
                 VStack(alignment: .leading, spacing: AppSpacing.md) {
@@ -334,6 +365,7 @@ struct OnboardingRestrictionsStep: View {
 struct OnboardingBudgetStep: View {
     @Bindable var model: OnboardingViewModel
     @Environment(AppContainer.self) private var container
+    @FocusState private var budgetFocused: Bool
 
     /// Common UK supermarkets offered as one-tap options.
     private static let suggestedSupermarkets = [
@@ -351,6 +383,7 @@ struct OnboardingBudgetStep: View {
                     keyboard: .decimalPad,
                     text: $model.budgetText
                 )
+                .focused($budgetFocused)
 
                 VStack(alignment: .leading, spacing: AppSpacing.md) {
                     SectionHeader(title: "Where do you shop?", subtitle: "Used for cost estimates")
@@ -378,6 +411,7 @@ struct OnboardingBudgetStep: View {
                 }
             }
         }
+        .keyboardDoneToolbar(isActive: budgetFocused) { budgetFocused = false }
     }
 
     /// Custom entries only — the suggested chains render as chips above.

@@ -263,6 +263,31 @@ struct OnboardingTagEditor: View {
     }
 }
 
+// MARK: - Keyboard accessory
+
+extension View {
+    /// Adds a trailing "Done"/"Next" button above the keyboard — needed because
+    /// the number/decimal pads used by the questionnaire have no return key.
+    /// `isActive` should reflect whether one of the caller's focus-bound fields
+    /// currently owns the keyboard, so the button never appears dead.
+    func keyboardDoneToolbar(
+        isActive: Bool,
+        title: String = "Done",
+        action: @escaping () -> Void
+    ) -> some View {
+        toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                if isActive {
+                    Spacer()
+                    Button(title, action: action)
+                        .appFont(.headline)
+                        .foregroundStyle(AppColor.brand)
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Previews
 
 #Preview("Controls") {
