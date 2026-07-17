@@ -83,6 +83,10 @@ Legend: `[ ]` pending · `[~]` in progress · `[x]` done
 - [ ] Generate list from a `MealPlan` (`ShoppingListService`)
 - [ ] Merge duplicates, subtract pantry stock, group by aisle
 - [ ] Tick / share / copy / print
+- [ ] Ticking off a long-life item (spices, condiments, staples) automatically
+      adds it to (or tops up) the pantry, so one-off recipe purchases aren't
+      lost — user request, 2026-07-17. Likely needs a "long-life" hint per
+      shopping category/ingredient
 - [ ] Budget engine: estimated spend, remaining budget, cost/meal, savings
 
 ## Phase 9 — Statistics
