@@ -47,3 +47,17 @@ Before considering a feature complete:
 - Keep context usage efficient.
 - Never rewrite unrelated code.
 - Preserve backwards compatibility unless intentionally refactoring.
+
+## Scope Control
+
+Never continue into another phase once the requested phase is complete.
+
+Do not implement adjacent features "while you're there".
+
+Do not perform speculative refactors.
+
+Do not optimise unrelated code.
+
+Avoid creating new files unless there is a clear architectural benefit.
+
+Prefer extending existing components over creating new abstractions.

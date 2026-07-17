@@ -14,6 +14,10 @@ planning behaviour was implemented**, by design.
 - **61 Swift files**, organised by layer/feature.
 - Verified: `xcodebuild` **BUILD SUCCEEDED**, app installs, launches and renders
   the onboarding screen with the design system applied (no crash).
+- Git: committed on `main`. Phase 1 foundation is the first commit; the docs
+  commit follows. Working tree clean at session close.
+- `CLAUDE.md` gained a **Scope Control** section this session (work stays within
+  the requested phase) — Phase 1 was delivered within that boundary.
 
 ## How to build
 

@@ -16,6 +16,9 @@ PantryPilot.xcodeproj/
 .build/
 .swiftpm/
 
+# Graphify (regenerable via `graphify update .`)
+graphify-out/
+
 # Misc
 *.moved-aside
 *.hmap
